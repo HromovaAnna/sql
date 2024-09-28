@@ -1,0 +1,45 @@
+SELECT v.vendor_name, p.product_name, SUM(5 * original_price) AS total_revenue
+FROM 
+    (SELECT vi.vendor_id, vi.product_id, vi.original_price
+     FROM vendor_inventory vi
+     CROSS JOIN customer c) AS cross_joined
+JOIN vendor v ON cross_joined.vendor_id = v.vendor_id
+JOIN product p ON cross_joined.product_id = p.product_id
+GROUP BY v.vendor_name, p.product_name;
+
+
+CREATE TABLE product_units AS
+SELECT *, CURRENT_TIMESTAMP AS snapshot_timestamp
+FROM product
+WHERE product_qty_type = 'unit';
+
+
+INSERT INTO product_units (product_id, product_name, product_size, product_category_id, product_qty_type, snapshot_timestamp)
+VALUES (101, 'Apple Pie', '500g', 3, 'unit', CURRENT_TIMESTAMP);
+
+
+ALTER TABLE product_units
+ADD current_quantity INT;
+
+
+ALTER TABLE product_units
+ADD current_quantity INT;
+
+UPDATE product_units
+SET current_quantity = (
+    SELECT COALESCE(MAX(vi.quantity), 0)
+    FROM vendor_inventory vi
+    WHERE vi.product_id = product_units.product_id
+);
+
+
+
+Reflecting on the ethical dimensions of data usage, I recognize the growing importance of integrating robust ethical practices into any work that involves access to personal data. In our increasingly data-driven world, the protection of personal information is paramount, and this responsibility must be taken seriously by anyone handling such data, regardless of their prior experience.
+
+To ensure ethical handling of personal data, I would emphasize the principles of transparency and informed consent. This involves developing clear policies on how data is collected, stored, and used, and ensuring that individuals understand what their data will be used for. Implementing straightforward consent forms and offering options for individuals to control their data—such as opting out or requesting deletion—can help build trust and empower individuals regarding their personal information.
+
+Moreover, safeguarding data security is essential. I would advocate for the implementation of best practices in data protection, including encryption, secure access controls, and regular security audits. These measures are crucial in preventing unauthorized access and ensuring that personal data is protected from breaches.
+
+Additionally, promoting a culture of ethical awareness among colleagues is vital. Conducting training on data ethics, privacy rights, and the consequences of data misuse can help instill a shared understanding of the importance of protecting personal information. By fostering an environment where ethical considerations are a priority, we can collectively work towards ensuring that personal data is handled responsibly and with respect.
+
+In summary, while I may not have worked with personal data directly, I understand the ethical implications involved. By focusing on transparency, security, and ethical training, I can contribute to a responsible approach to data usage that prioritizes individuals' rights and fosters trust in any future projects I undertake.
